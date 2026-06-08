@@ -8,6 +8,7 @@ ModbusRTUBuilder modbusRTU(Serial2, EN_PIN);
 void setup()
 {
     Serial.begin(115200);
+    Serial2.begin(9600, SERIAL_8N1, 16, 17); // You could also use SoftwareSerial
 
     modbusRTU.setSlaveId(0x01).setFunctionCode(0x03).setAddress(0x02).setLengthAddress(2);
     modbusRTU.connect();
@@ -17,7 +18,6 @@ void setup()
 
 void loop()
 {
-
     float temperature = modbusRTU.read(0); // Read first register
     float humidity = modbusRTU.read(1);    // Read second register
 
