@@ -1,8 +1,8 @@
 #include "SensorBuilder.h"
 
-ModbusRTUBuilder::ModbusRTUBuilder(HardwareSerial &serial) : _base(ModbusBase()), _ss(serial) {}
+ModbusRTUBuilder::ModbusRTUBuilder(Stream &serial) : _base(ModbusBase()), _ss(serial) {}
 
-ModbusRTUBuilder::ModbusRTUBuilder(HardwareSerial &serial, uint8_t enPin)
+ModbusRTUBuilder::ModbusRTUBuilder(Stream &serial, uint8_t enPin)
     : _base(ModbusBase()), _ss(serial), _enablePin(enPin) {}
 
 ModbusRTUBuilder::~ModbusRTUBuilder() = default;
@@ -84,9 +84,9 @@ ModbusBase ModbusRTUBuilder::getConfig()
     return _base;
 }
 
-MockModbusRTUBuilder::MockModbusRTUBuilder(HardwareSerial &serial) : _base(ModbusBase()), _ss(serial) {}
+MockModbusRTUBuilder::MockModbusRTUBuilder(Stream &serial) : _base(ModbusBase()), _ss(serial) {}
 
-MockModbusRTUBuilder::MockModbusRTUBuilder(HardwareSerial &serial, uint8_t enPin)
+MockModbusRTUBuilder::MockModbusRTUBuilder(Stream &serial, uint8_t enPin)
     : _base(ModbusBase()), _ss(serial), _enablePin(enPin) {}
 
 MockModbusRTUBuilder::~MockModbusRTUBuilder() = default;

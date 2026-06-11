@@ -43,7 +43,7 @@ private:
     ModbusBase _base;
 
     ModbusMaster _node;
-    HardwareSerial _ss;
+    Stream &_ss;
     uint8_t _enablePin = 255;
 
     static void preTransmission()
@@ -63,8 +63,8 @@ private:
     }
 
 public:
-    ModbusRTUBuilder(HardwareSerial &serial);
-    ModbusRTUBuilder(HardwareSerial &serial, uint8_t enPin);
+    ModbusRTUBuilder(Stream &serial);
+    ModbusRTUBuilder(Stream &serial, uint8_t enPin);
     ~ModbusRTUBuilder();
 
     BuilderBaseModbus &setSlaveId(uint8_t slaveId) override;
@@ -84,7 +84,7 @@ private:
     ModbusBase _base;
 
     ModbusMaster _node;
-    HardwareSerial _ss;
+    Stream &_ss;
     uint8_t _enablePin = 255;
 
     static uint8_t &callbackPin()
@@ -94,8 +94,8 @@ private:
     }
 
 public:
-    MockModbusRTUBuilder(HardwareSerial &serial);
-    MockModbusRTUBuilder(HardwareSerial &serial, uint8_t enPin);
+    MockModbusRTUBuilder(Stream &serial);
+    MockModbusRTUBuilder(Stream &serial, uint8_t enPin);
     ~MockModbusRTUBuilder();
 
     BuilderBaseModbus &setSlaveId(uint8_t slaveId) override;
