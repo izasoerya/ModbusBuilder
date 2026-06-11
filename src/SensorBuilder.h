@@ -44,7 +44,7 @@ private:
 
     ModbusMaster _node;
     HardwareSerial _ss;
-    uint8_t _enablePin;
+    uint8_t _enablePin = 255;
 
     static void preTransmission()
     {
@@ -63,6 +63,7 @@ private:
     }
 
 public:
+    ModbusRTUBuilder(HardwareSerial &serial);
     ModbusRTUBuilder(HardwareSerial &serial, uint8_t enPin);
     ~ModbusRTUBuilder();
 
@@ -84,7 +85,7 @@ private:
 
     ModbusMaster _node;
     HardwareSerial _ss;
-    uint8_t _enablePin;
+    uint8_t _enablePin = 255;
 
     static uint8_t &callbackPin()
     {
@@ -93,6 +94,7 @@ private:
     }
 
 public:
+    MockModbusRTUBuilder(HardwareSerial &serial);
     MockModbusRTUBuilder(HardwareSerial &serial, uint8_t enPin);
     ~MockModbusRTUBuilder();
 

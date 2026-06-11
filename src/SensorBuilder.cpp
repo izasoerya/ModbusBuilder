@@ -1,5 +1,7 @@
 #include "SensorBuilder.h"
 
+ModbusRTUBuilder::ModbusRTUBuilder(HardwareSerial &serial) : _base(ModbusBase()), _ss(serial) {}
+
 ModbusRTUBuilder::ModbusRTUBuilder(HardwareSerial &serial, uint8_t enPin)
     : _base(ModbusBase()), _ss(serial), _enablePin(enPin) {}
 
@@ -7,14 +9,17 @@ ModbusRTUBuilder::~ModbusRTUBuilder() = default;
 
 uint8_t ModbusRTUBuilder::connect()
 {
-    callbackPin() = _enablePin;
-    pinMode(_enablePin, OUTPUT);
-    digitalWrite(_enablePin, LOW);
+    if (_enablePin = 255)
+    {
+        callbackPin() = _enablePin;
+        pinMode(_enablePin, OUTPUT);
+        digitalWrite(_enablePin, LOW);
 
-    _node.preTransmission(preTransmission);
-    _node.postTransmission(postTransmission);
+        _node.preTransmission(preTransmission);
+        _node.postTransmission(postTransmission);
+    }
+
     _node.begin(_base.slaveId, _ss);
-
     uint8_t result = _node.readHoldingRegisters(0x00, 1);
     if (result == _node.ku8MBSuccess)
     {
@@ -79,6 +84,8 @@ ModbusBase ModbusRTUBuilder::getConfig()
     return _base;
 }
 
+MockModbusRTUBuilder::MockModbusRTUBuilder(HardwareSerial &serial) : _base(ModbusBase()), _ss(serial) {}
+
 MockModbusRTUBuilder::MockModbusRTUBuilder(HardwareSerial &serial, uint8_t enPin)
     : _base(ModbusBase()), _ss(serial), _enablePin(enPin) {}
 
@@ -86,6 +93,11 @@ MockModbusRTUBuilder::~MockModbusRTUBuilder() = default;
 
 uint8_t MockModbusRTUBuilder::connect()
 {
+    if (_enablePin == 255)
+    {
+        Serial.println("Automatic Flow Control, no EN pin");
+        return 1;
+    }
     callbackPin() = _enablePin;
     Serial.print("EN Pin: ");
     Serial.println(_enablePin);
