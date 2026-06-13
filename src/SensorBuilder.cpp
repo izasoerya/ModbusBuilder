@@ -9,7 +9,7 @@ ModbusRTUBuilder::~ModbusRTUBuilder() = default;
 
 uint8_t ModbusRTUBuilder::connect()
 {
-    if (_enablePin = 255)
+    if (_enablePin != 255)
     {
         callbackPin() = _enablePin;
         pinMode(_enablePin, OUTPUT);
