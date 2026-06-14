@@ -26,10 +26,10 @@ struct ReadResult
 {
     uint16_t value;
     uint8_t error;
- 
+
     bool isOk() const { return error == ModbusMaster::ku8MBSuccess; }
 
-        const char *errorMessage() const
+    const char *errorMessage() const
     {
         switch (error)
         {
@@ -56,11 +56,11 @@ struct ReadResult
         }
     }
 
-        static ReadResult ok(uint16_t val)
+    static ReadResult ok(uint16_t val)
     {
         return {val, ModbusMaster::ku8MBSuccess};
     }
- 
+
     static ReadResult fail(uint8_t err)
     {
         return {0, err};

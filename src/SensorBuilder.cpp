@@ -39,7 +39,7 @@ ReadResult ModbusRTUBuilder::read(uint8_t responseIndex)
 
     if (_base.functionCode == 0x03)
     {
-                uint8_t result = _node.readHoldingRegisters(_base.address, _base.lengthAddress);
+        uint8_t result = _node.readHoldingRegisters(_base.address, _base.lengthAddress);
         if (result == _node.ku8MBSuccess)
         {
             return ReadResult::ok(_node.getResponseBuffer(responseIndex));
@@ -48,7 +48,7 @@ ReadResult ModbusRTUBuilder::read(uint8_t responseIndex)
     }
     else if (_base.functionCode == 0x04)
     {
-                uint8_t result = _node.readInputRegisters(_base.address, _base.lengthAddress);
+        uint8_t result = _node.readInputRegisters(_base.address, _base.lengthAddress);
         if (result == _node.ku8MBSuccess)
         {
             return ReadResult::ok(_node.getResponseBuffer(responseIndex));
