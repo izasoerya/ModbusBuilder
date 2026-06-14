@@ -30,30 +30,32 @@ uint8_t ModbusRTUBuilder::connect()
     return result;
 }
 
-uint16_t ModbusRTUBuilder::read(uint8_t responseIndex)
+ReadResult ModbusRTUBuilder::read(uint8_t responseIndex)
 {
     if (responseIndex >= _base.lengthAddress)
     {
-        return 0;
+        return ReadResult::fail(ModbusMaster::ku8MBIllegalDataAddress);
     }
 
     if (_base.functionCode == 0x03)
     {
-        uint8_t result = _node.readHoldingRegisters(_base.address, _base.lengthAddress);
+                uint8_t result = _node.readHoldingRegisters(_base.address, _base.lengthAddress);
         if (result == _node.ku8MBSuccess)
         {
-            return _node.getResponseBuffer(responseIndex);
+            return ReadResult::ok(_node.getResponseBuffer(responseIndex));
         }
+        return ReadResult::fail(result);
     }
     else if (_base.functionCode == 0x04)
     {
-        uint8_t result = _node.readInputRegisters(_base.address, _base.lengthAddress);
+                uint8_t result = _node.readInputRegisters(_base.address, _base.lengthAddress);
         if (result == _node.ku8MBSuccess)
         {
-            return _node.getResponseBuffer(responseIndex);
+            return ReadResult::ok(_node.getResponseBuffer(responseIndex));
         }
+        return ReadResult::fail(result);
     }
-    return 0;
+    return ReadResult::fail(ModbusMaster::ku8MBInvalidFunction);
 }
 
 BuilderBaseModbus &ModbusRTUBuilder::setSlaveId(uint8_t slaveId)
@@ -104,12 +106,12 @@ uint8_t MockModbusRTUBuilder::connect()
     return 1;
 }
 
-uint16_t MockModbusRTUBuilder::read(uint8_t responseIndex)
+ReadResult MockModbusRTUBuilder::read(uint8_t responseIndex)
 {
     if (responseIndex >= _base.lengthAddress)
     {
         Serial.println("Request address outbond");
-        return 0;
+        return ReadResult::fail(ModbusMaster::ku8MBIllegalDataAddress);
     }
 
     if (_base.functionCode == 0x03)
@@ -126,7 +128,7 @@ uint16_t MockModbusRTUBuilder::read(uint8_t responseIndex)
         Serial.print(_base.address + responseIndex);
         Serial.println("");
     }
-    return 0;
+    return ReadResult::fail(ModbusMaster::ku8MBInvalidFunction);
 }
 
 BuilderBaseModbus &MockModbusRTUBuilder::setSlaveId(uint8_t slaveId)
