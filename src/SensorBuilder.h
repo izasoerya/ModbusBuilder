@@ -76,7 +76,7 @@ public:
     virtual BuilderBaseModbus &setFunctionCode(uint8_t functionCode) = 0;
     virtual BuilderBaseModbus &setLengthAddress(uint8_t lengthAddress) = 0;
 
-    virtual uint8_t connect() = 0;
+    virtual ReadResult connect() = 0;
     virtual ReadResult read(uint8_t index) = 0;
 
     virtual ModbusBase getConfig() = 0;
@@ -117,7 +117,7 @@ public:
     BuilderBaseModbus &setFunctionCode(uint8_t functionCode) override;
     BuilderBaseModbus &setLengthAddress(uint8_t lengthAddress) override;
 
-    uint8_t connect() override;
+    ReadResult connect() override;
     ReadResult read(uint8_t index) override;
 
     ModbusBase getConfig() override;
@@ -148,7 +148,7 @@ public:
     BuilderBaseModbus &setFunctionCode(uint8_t functionCode) override;
     BuilderBaseModbus &setLengthAddress(uint8_t lengthAddress) override;
 
-    uint8_t connect() override;
+    ReadResult connect() override;
     ReadResult read(uint8_t index) override;
 
     ModbusBase getConfig() override;
