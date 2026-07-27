@@ -22,6 +22,51 @@ public:
     }
 };
 
+struct ReadResult
+{
+    uint16_t value;
+    uint8_t error;
+
+    bool isOk() const { return error == ModbusMaster::ku8MBSuccess; }
+
+    const char *errorMessage() const
+    {
+        switch (error)
+        {
+        case ModbusMaster::ku8MBSuccess:
+            return "Success";
+        case ModbusMaster::ku8MBIllegalFunction:
+            return "Illegal Function";
+        case ModbusMaster::ku8MBIllegalDataAddress:
+            return "Illegal Data Address";
+        case ModbusMaster::ku8MBIllegalDataValue:
+            return "Illegal Data Value";
+        case ModbusMaster::ku8MBSlaveDeviceFailure:
+            return "Slave Device Failure";
+        case ModbusMaster::ku8MBInvalidSlaveID:
+            return "Invalid Slave ID";
+        case ModbusMaster::ku8MBInvalidFunction:
+            return "Invalid Function";
+        case ModbusMaster::ku8MBResponseTimedOut:
+            return "Response Timed Out";
+        case ModbusMaster::ku8MBInvalidCRC:
+            return "Invalid CRC";
+        default:
+            return "Unknown Error";
+        }
+    }
+
+    static ReadResult ok(uint16_t val)
+    {
+        return {val, ModbusMaster::ku8MBSuccess};
+    }
+
+    static ReadResult fail(uint8_t err)
+    {
+        return {0, err};
+    }
+};
+
 class BuilderBaseModbus
 {
 public:
@@ -31,8 +76,8 @@ public:
     virtual BuilderBaseModbus &setFunctionCode(uint8_t functionCode) = 0;
     virtual BuilderBaseModbus &setLengthAddress(uint8_t lengthAddress) = 0;
 
-    virtual uint8_t connect() = 0;
-    virtual uint16_t read(uint8_t index) = 0;
+    virtual ReadResult connect() = 0;
+    virtual ReadResult read(uint8_t index) = 0;
 
     virtual ModbusBase getConfig() = 0;
 };
@@ -72,8 +117,8 @@ public:
     BuilderBaseModbus &setFunctionCode(uint8_t functionCode) override;
     BuilderBaseModbus &setLengthAddress(uint8_t lengthAddress) override;
 
-    uint8_t connect() override;
-    uint16_t read(uint8_t index) override;
+    ReadResult connect() override;
+    ReadResult read(uint8_t index) override;
 
     ModbusBase getConfig() override;
 };
@@ -103,8 +148,8 @@ public:
     BuilderBaseModbus &setFunctionCode(uint8_t functionCode) override;
     BuilderBaseModbus &setLengthAddress(uint8_t lengthAddress) override;
 
-    uint8_t connect() override;
-    uint16_t read(uint8_t index) override;
+    ReadResult connect() override;
+    ReadResult read(uint8_t index) override;
 
     ModbusBase getConfig() override;
 };
