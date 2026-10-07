@@ -8,7 +8,7 @@ class ModbusBase
 {
 public:
     uint8_t slaveId;
-    uint8_t address;
+    uint16_t address;
     uint8_t functionCode;
     uint8_t lengthAddress;
 
@@ -16,7 +16,7 @@ public:
     {
         char buffer[37];
         snprintf(buffer, sizeof(buffer),
-                 "id:%" PRIu8 ", fc:%" PRIu8 ", add:%" PRIu8 ", len:%" PRIu8 "",
+                 "id:%" PRIu8 ", fc:%" PRIu8 ", add:%d, len:%" PRIu8 "",
                  slaveId, functionCode, address, lengthAddress);
         return String(buffer);
     }
