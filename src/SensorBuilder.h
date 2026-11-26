@@ -1,7 +1,6 @@
 #ifndef SENSOR_MANAGER_H
 #define SENSOR_MANAGER_H
 
-#include <Arduino.h>
 #include <ModbusMaster.h>
 
 class ModbusBase
@@ -10,13 +9,13 @@ public:
     uint8_t slaveId;
     uint16_t address;
     uint8_t functionCode;
-    uint8_t lengthAddress;
+    uint16_t lengthAddress;
 
     String toString()
     {
-        char buffer[37];
+        char buffer[64];
         snprintf(buffer, sizeof(buffer),
-                 "id:%" PRIu8 ", fc:%" PRIu8 ", add:%d, len:%" PRIu8 "",
+                 "id:%" PRIu8 ", fc:%" PRIu8 ", add:%d, len:%d\n",
                  slaveId, functionCode, address, lengthAddress);
         return String(buffer);
     }
@@ -72,12 +71,12 @@ class BuilderBaseModbus
 public:
     virtual ~BuilderBaseModbus() = default;
     virtual BuilderBaseModbus &setSlaveId(uint8_t slaveId) = 0;
-    virtual BuilderBaseModbus &setAddress(uint8_t address) = 0;
+    virtual BuilderBaseModbus &setAddress(uint16_t address) = 0;
     virtual BuilderBaseModbus &setFunctionCode(uint8_t functionCode) = 0;
-    virtual BuilderBaseModbus &setLengthAddress(uint8_t lengthAddress) = 0;
+    virtual BuilderBaseModbus &setLengthAddress(uint16_t lengthAddress) = 0;
 
-    virtual ReadResult connect() = 0;
-    virtual ReadResult read(uint8_t index) = 0;
+    virtual void connect() = 0;
+    virtual ReadResult read(uint16_t index, uint8_t retries) = 0;
 
     virtual ModbusBase getConfig() = 0;
 };
@@ -113,12 +112,12 @@ public:
     ~ModbusRTUBuilder();
 
     BuilderBaseModbus &setSlaveId(uint8_t slaveId) override;
-    BuilderBaseModbus &setAddress(uint8_t address) override;
+    BuilderBaseModbus &setAddress(uint16_t address) override;
     BuilderBaseModbus &setFunctionCode(uint8_t functionCode) override;
-    BuilderBaseModbus &setLengthAddress(uint8_t lengthAddress) override;
+    BuilderBaseModbus &setLengthAddress(uint16_t lengthAddress) override;
 
-    ReadResult connect() override;
-    ReadResult read(uint8_t index) override;
+    void connect() override;
+    ReadResult read(uint16_t index, uint8_t retries = 3) override;
 
     ModbusBase getConfig() override;
 };
@@ -144,12 +143,12 @@ public:
     ~MockModbusRTUBuilder();
 
     BuilderBaseModbus &setSlaveId(uint8_t slaveId) override;
-    BuilderBaseModbus &setAddress(uint8_t address) override;
+    BuilderBaseModbus &setAddress(uint16_t address) override;
     BuilderBaseModbus &setFunctionCode(uint8_t functionCode) override;
-    BuilderBaseModbus &setLengthAddress(uint8_t lengthAddress) override;
+    BuilderBaseModbus &setLengthAddress(uint16_t lengthAddress) override;
 
-    ReadResult connect() override;
-    ReadResult read(uint8_t index) override;
+    void connect() override;
+    ReadResult read(uint16_t index, uint8_t retries = 3) override;
 
     ModbusBase getConfig() override;
 };

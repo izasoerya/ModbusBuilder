@@ -5,14 +5,17 @@
 #define EN_PIN 3
 
 EspSoftwareSerial::UART myPort;
-MockModbusRTUBuilder modbusRTU(myPort);
+ModbusRTUBuilder modbusRTU(myPort);
 
 void setup()
 {
     Serial.begin(115200);
     myPort.begin(9600, SWSERIAL_8N1, 16, 17);
 
-    modbusRTU.setSlaveId(0x01).setFunctionCode(0x03).setAddress(0x02).setLengthAddress(2);
+    modbusRTU.setSlaveId(0x01)
+        .setFunctionCode(0x03)
+        .setAddress(0x00)
+        .setLengthAddress(2);
     modbusRTU.connect();
 
     Serial.println(modbusRTU.getConfig().toString());
@@ -26,26 +29,28 @@ void loop()
      *
      * This way we can be sure that the data is not an error code
      */
-    ReadResult temperatureResult = modbusRTU.read(0);
-    if (temperatureResult.isOk())
+    ReadResult resTemp = modbusRTU.read(0);
+    if (resTemp.isOk())
     {
-        float temperature = modbusRTU.read(0).value;
+        float temperature = resTemp.value;
+        Serial.printf("Temperature is: %d\n", temperature);
     }
     else
     {
-        String error = modbusRTU.read(0).errorMessage();
-        Serial.println(error);
+        Serial.printf("Err Code: %d | %s\n",
+                      resTemp.error, resTemp.errorMessage());
     }
 
-    ReadResult humidityResult = modbusRTU.read(1);
-    if (humidityResult.isOk())
+    ReadResult resHum = modbusRTU.read(1);
+    if (resHum.isOk())
     {
         float humidity = modbusRTU.read(1).value;
+        Serial.printf("Humidity is: %d\n", humidity);
     }
     else
     {
-        String error = modbusRTU.read(1).errorMessage();
-        Serial.println(error);
+        Serial.printf("Err Code: %d | %s\n",
+                      resHum.error, resHum.errorMessage());
     }
 
     delay(2000);
