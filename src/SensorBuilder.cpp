@@ -21,7 +21,7 @@ void ModbusRTUBuilder::connect()
     _node.begin(_base.slaveId, _ss);
 }
 
-ReadResult ModbusRTUBuilder::read(uint16_t index, uint8_t retries = 3)
+ReadResult ModbusRTUBuilder::read(uint16_t index, uint8_t retries)
 {
     if (index >= _base.lengthAddress)
         return ReadResult::fail(ModbusMaster::ku8MBIllegalDataAddress);
@@ -95,7 +95,7 @@ void MockModbusRTUBuilder::connect()
     Serial.printf("EN Pin is on: %d\n", _enablePin);
 }
 
-ReadResult MockModbusRTUBuilder::read(uint16_t index, uint8_t retries = 3)
+ReadResult MockModbusRTUBuilder::read(uint16_t index, uint8_t retries)
 {
     if (index >= _base.lengthAddress)
     {
